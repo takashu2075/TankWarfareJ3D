@@ -89,7 +89,7 @@ public class Tank extends Actor implements OnCollisionEnter {
 	float turretRotation = 0.0f;
 	float muzzleRotation = 0.0f;
 
-	int life = 1000;
+	int life = 100;
 
 	int fireInterval = 30;
 	int fireIntervalCount = 0;
