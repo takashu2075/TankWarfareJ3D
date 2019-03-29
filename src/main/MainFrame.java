@@ -6,7 +6,9 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
+import java.awt.Image;
 import java.awt.Label;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
@@ -14,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -74,14 +77,15 @@ public class MainFrame extends JFrame {
 	
 	Game game;
 	
-	String backgroundImagePath = "C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\metal.jpg";
+	String backgroundImagePath = "metal.jpg";
 	BufferedImage backGroundImage = null;
 	
 	Color labelColor = new Color(0.8f, 0.8f, 0.8f);
 	
 	public MainFrame() {
 		try {
-            this.backGroundImage = ImageIO.read(new File(backgroundImagePath));
+//            this.backGroundImage = ImageIO.read(new File(backgroundImagePath));
+			this.backGroundImage = ImageIO.read(getClass().getClassLoader().getResource(backgroundImagePath));
         } catch (IOException ex) {
             ex.printStackTrace();
             this.backGroundImage = null;
@@ -246,7 +250,15 @@ public class MainFrame extends JFrame {
 			label.setForeground(labelColor);
 			add(label);
 			
-			ImageIcon townIcon = new ImageIcon("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\town.jpg");
+			Image townImage = null;
+			try {
+				townImage = ImageIO.read(getClass().getClassLoader().getResource("town.jpg"));
+			} catch (IOException e1) {
+				// TODO é©ìÆê∂ê¨Ç≥ÇÍÇΩ catch ÉuÉçÉbÉN
+				e1.printStackTrace();
+			}
+			
+			ImageIcon townIcon = new ImageIcon(townImage);
 			
 			int stageButtonSize = 300;
 			int halfStageButtonSize = stageButtonSize / 2;

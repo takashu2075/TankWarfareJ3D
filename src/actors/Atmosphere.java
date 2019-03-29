@@ -1,14 +1,18 @@
 package actors;
 
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.awt.BorderLayout;
 import java.awt.GraphicsConfiguration;
-import com.sun.j3d.utils.universe.*;
-import javax.media.j3d.*;
-import com.sun.j3d.utils.geometry.Sphere;
-import javax.vecmath.*;
 
+import com.sun.j3d.utils.universe.*;
+
+import javax.media.j3d.*;
+
+import com.sun.j3d.utils.geometry.Sphere;
+
+import javax.vecmath.*;
 import javax.media.j3d.Background;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
@@ -18,20 +22,22 @@ import javax.media.j3d.LinearFog;
 
 import java.awt.GraphicsConfiguration;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.TransformGroup;
+
 import com.sun.j3d.loaders.*;
 import com.sun.j3d.loaders.objectfile.ObjectFile;
+
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.ViewingPlatform;
-
 import com.sun.j3d.utils.image.TextureLoader;
 
 import actors.Atmosphere;
@@ -70,8 +76,8 @@ public class Atmosphere extends Actor {
 	private Background background;
 	
 	Color3f FOG_COLOR = new Color3f(0.995f, 0.999f, 1.0f);
-	String SKY_TEXTURE_PATH = "C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\skybox\\sky.jpg";
-	String SKY_MESH_PATH = "C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\skybox\\model.obj";
+	String SKY_TEXTURE_PATH = "skybox\\sky.jpg";
+	String SKY_MESH_PATH = "skybox\\model.obj";
 	
 	Color3f fogColor = new Color3f(0.6f, 0.86f, 1.0f);
 	Color3f ambientColor = new Color3f(1f, 1f, 1.0f);
@@ -99,8 +105,11 @@ public class Atmosphere extends Actor {
 
 		BranchGroup geometryBranchGroup = new BranchGroup();
 		
-		Appearance app = new Appearance(); 
-		Texture tex = new TextureLoader(SKY_TEXTURE_PATH, World.getSimpleUniverse().getCanvas()).getTexture();
+		Appearance app = new Appearance();
+		
+		URL url = getClass().getClassLoader().getResource(SKY_TEXTURE_PATH);
+		
+		Texture tex = new TextureLoader(url, World.getSimpleUniverse().getCanvas()).getTexture();
 				
 		app.setTexture( tex );
 		Sphere skybox = new Sphere(1.0f, Primitive.GENERATE_TEXTURE_COORDS | Primitive.GENERATE_NORMALS_INWARD, app);

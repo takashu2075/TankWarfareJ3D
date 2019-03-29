@@ -45,8 +45,13 @@ public class ObjLoader extends LoaderBase {
 
     public Scene load(String fname) {
     	System.out.println(fname.length());
+    	
+    	if (fname.substring(0, 6).equals("file:/")) {
+    		fname = fname.substring(6, fname.length());
+    	}
+    	
     	for (int i = fname.length(); i > 0; i--) {
-    		if (fname.substring(i - 1, i).equals("\\")) {
+    		if (fname.substring(i - 1, i).equals("\\") || fname.substring(i - 1, i).equals("/")) {
         		filePath = fname.substring(0, i);
         		break;
     		}

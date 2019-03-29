@@ -46,7 +46,7 @@ public class Tower extends Actor{
 	public Tower() {
 		ObjLoader objLoader = new ObjLoader();
 		Scene tankModel = null;		
-		tankModel = objLoader.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\tower\\20950_Tower_v1_NEW.obj");
+		tankModel = objLoader.load(getClass().getClassLoader().getResource("tower/20950_Tower_v1_NEW.obj").toString());
 		
 		BoxShape boxShape = new BoxShape(new Vector3f(5.0f, 5.0f, 10.0f));
 		Transform3D transform3D = new Transform3D();

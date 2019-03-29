@@ -74,9 +74,9 @@ public class SparkMaker extends Maker {
 		smokeTransparencyAttributes.setTransparencyMode(TransparencyAttributes.BLENDED);
 		
 		ObjLoader objLoader1 = new ObjLoader();
-		explosionModel = objLoader1.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\explosion\\model.obj");
+		explosionModel = objLoader1.load(getClass().getClassLoader().getResource("explosion/model.obj").toString());
 		ObjLoader objLoader2 = new ObjLoader();
-		smokeModel = objLoader2.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\smoke\\model.obj");
+		smokeModel = objLoader2.load(getClass().getClassLoader().getResource("smoke/model.obj").toString());
 		
 		Transform3D transform3D = new Transform3D();
 		transform3D.setTranslation(new Vector3f(0, 10, 0));

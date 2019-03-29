@@ -19,7 +19,6 @@ import com.sun.j3d.utils.image.TextureLoader;
 import com.bulletphysics.dynamics.constraintsolver.HingeConstraint;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.dynamics.vehicle.*;
-
 import com.sun.j3d.loaders.*;
 import com.sun.j3d.loaders.objectfile.ObjectFile;
 
@@ -30,6 +29,8 @@ import java.awt.font.TransformAttribute;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 import java.util.List;
 import java.util.Timer;
@@ -59,7 +60,7 @@ public class ExplosionMaker extends Maker {
 	
 	static BranchGroup debriBranchGroup;
 	
-	String EXPLOSION_TEXTURE_PATH = "C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\explosion\\explosion_sphere.jpg";
+	String EXPLOSION_TEXTURE_PATH = "explosion\\explosion_sphere.jpg";
 	
 	private static World world;
 	
@@ -73,12 +74,16 @@ public class ExplosionMaker extends Maker {
 		explosionTransparencyAttributes.setTransparencyMode(TransparencyAttributes.BLENDED);
 		smokeTransparencyAttributes.setTransparencyMode(TransparencyAttributes.BLENDED);
 		
+		URL url = getClass().getClassLoader().getResource("explosion/explosion_sphere.obj");
+		System.out.println(url.toString());
+		
 		ObjLoader objLoader1 = new ObjLoader();
-		Scene explosionModel = objLoader1.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\explosion\\explosion_sphere.obj");
+		Scene explosionModel = objLoader1.load(url.toString());
 		ObjLoader objLoader2 = new ObjLoader();
-		Scene smokeModel = objLoader2.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\smoke\\model.obj");
+		
+		Scene smokeModel = objLoader2.load(getClass().getClassLoader().getResource("smoke/model.obj").toString());
 		ObjLoader objLoader3 = new ObjLoader();
-		Scene debriModel = objLoader3.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\debri\\model.obj");
+		Scene debriModel = objLoader3.load(getClass().getClassLoader().getResource("debri/model.obj").toString());
 		
 		Transform3D transform3D = new Transform3D();
 		transform3D.setTranslation(new Vector3f(0, -1000, 0));

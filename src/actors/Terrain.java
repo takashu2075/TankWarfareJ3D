@@ -50,7 +50,7 @@ public class Terrain extends Actor{
 	public Terrain() {
 		ObjLoader objLoader = new ObjLoader();
 		Scene model = null;		
-		model = objLoader.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\terrain\\model_2.obj");
+		model = objLoader.load(getClass().getClassLoader().getResource("terrain/model_2.obj").toString());
 		
 		TriangleIndexVertexArray vertArray = new TriangleIndexVertexArray();
 		float[] verticles = objLoader.getVerticles();

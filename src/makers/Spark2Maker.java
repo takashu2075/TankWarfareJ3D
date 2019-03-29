@@ -46,14 +46,14 @@ import com.bulletphysics.dynamics.vehicle.*;
 public class Spark2Maker extends Maker {
 	private static Shape3D explosionShape;
 	
-	String EXPLOSION_TEXTURE_PATH = "C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\explosion\\explosion_sphere.jpg";
+	String EXPLOSION_TEXTURE_PATH = "explosion\\explosion_sphere.jpg";
 	
 	public Spark2Maker() {
 		TransparencyAttributes explosionTransparencyAttributes = new TransparencyAttributes();
 		explosionTransparencyAttributes.setTransparencyMode(TransparencyAttributes.BLENDED);
 		
 		ObjLoader objLoader1 = new ObjLoader();
-		Scene explosionModel = objLoader1.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\explosion\\explosion_sphere.obj");
+		Scene explosionModel = objLoader1.load(getClass().getClassLoader().getResource("explosion/explosion_sphere.obj").toString());
 		explosionShape = (Shape3D) explosionModel.getSceneGroup().getChild(0);
 		explosionShape.getAppearance().setTransparencyAttributes(explosionTransparencyAttributes);
 		explosionShape.getAppearance().setCapability(Appearance.ALLOW_TRANSPARENCY_ATTRIBUTES_WRITE);

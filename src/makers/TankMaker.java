@@ -41,15 +41,16 @@ public class TankMaker extends Maker {
 	
 	public TankMaker() {
 		ObjLoader objLoader1 = new ObjLoader();
-		Scene bodyModel = objLoader1.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\tank\\body.obj");
+//		Scene bodyModel = objLoader1.load(getClass().getClassLoader().getResource("tank\\body.obj");
+		Scene bodyModel = objLoader1.load(getClass().getClassLoader().getResource("tank/body.obj").toString());
 		bodyShape = bodyModel.getSceneGroup();
 		
 		ObjLoader objLoader2 = new ObjLoader();
-		Scene turretModel = objLoader2.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\tank\\turret.obj");
+		Scene turretModel = objLoader2.load(getClass().getClassLoader().getResource("tank/turret.obj").toString());
 		turretShape = turretModel.getSceneGroup();
 		
 		ObjLoader objLoader3 = new ObjLoader();
-		Scene cannonModel = objLoader3.load("C:\\Eclipse\\workspace\\TankWarfareJ3D\\resources\\tank\\cannon.obj");
+		Scene cannonModel = objLoader3.load(getClass().getClassLoader().getResource("tank/cannon.obj").toString());
 		cannonShape = cannonModel.getSceneGroup();
 	}
 	
