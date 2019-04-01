@@ -1,69 +1,34 @@
 package main;
 
-import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
+import java.util.ArrayList;
 
-import com.bulletphysics.dynamics.constraintsolver.*;
+import javax.media.j3d.Canvas3D;
+import javax.media.j3d.TransformGroup;
 
-import com.bulletphysics.dynamics.constraintsolver.ContactConstraint;
-
-import abstracts.Actor;
-
-import javax.media.j3d.*;
-import javax.vecmath.*;
-
-import org.omg.CORBA.DynamicImplementation;
-
-import actors.ActorComponent;
-import actors.Atmosphere;
-import actors.Cannon;
-import actors.Explosion;
-import actors.Spark;
-import actors.Sun;
-import actors.Tank;
-import actors.Terrain;
-import controlers.PlayerTankController;
-
-import com.sun.j3d.utils.universe.*;
-import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.broadphase.Dispatcher;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
-import com.bulletphysics.collision.shapes.BoxShape;
-import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
-import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
-import com.bulletphysics.dynamics.constraintsolver.HingeConstraint;
+import com.bulletphysics.dynamics.DynamicsWorld;
+import com.bulletphysics.dynamics.InternalTickCallback;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.Clock;
-import com.bulletphysics.util.ObjectArrayList;
-import com.bulletphysics.*;
-import com.bulletphysics.dynamics.*;
+import com.sun.j3d.utils.universe.SimpleUniverse;
+import com.sun.j3d.utils.universe.ViewingPlatform;
 
-import com.sun.j3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
-import com.sun.j3d.utils.geometry.*;
-
+import abstracts.Actor;
+import actors.ActorComponent;
 import inter.OnCollisionEnter;
-import makers.BulletMaker;
+import makers.CannonMaker;
 import makers.ExplosionMaker;
-import makers.Spark2Maker;
+import makers.FlashMaker;
 import makers.SparkMaker;
-import utils.AttackDetector;
-import utils.EnemyCounter;
-
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-
-import java.util.*;
-import java.util.Timer;
-import com.bulletphysics.collision.dispatch.CollisionObject;
-
-import com.bulletphysics.collision.dispatch.GhostObject;
+import makers.TreeMaker;
 
 public class World {
 	static SimpleUniverse simpleUniverse;
@@ -77,9 +42,10 @@ public class World {
 	TransformGroup cameraTransformGroup;
 
 	ExplosionMaker explosionMaker;
-	SparkMaker muzzleMaker;
-	BulletMaker bulletMaker;
-	Spark2Maker spark2Maker;
+	FlashMaker muzzleMaker;
+	CannonMaker bulletMaker;
+	SparkMaker sparkMaker;
+	TreeMaker treeMaker;
 
 	public World(Canvas3D canvas3D) {
 		simpleUniverse = new SimpleUniverse(canvas3D);
@@ -102,8 +68,9 @@ public class World {
 		actors = new ArrayList<Actor>();
 
 		explosionMaker = new ExplosionMaker(cameraTransformGroup, simpleUniverse.getCanvas(), this);
-		muzzleMaker = new SparkMaker(cameraTransformGroup, this);
-		spark2Maker = new Spark2Maker();
+		muzzleMaker = new FlashMaker(cameraTransformGroup, this);
+		sparkMaker = new SparkMaker();
+		treeMaker = new TreeMaker();
 	}
 
 	public static void add(Actor actor) {
@@ -127,7 +94,7 @@ public class World {
 		if (idle) {
 			dt = 1f / 420f;
 		}
-		
+
 		int numSimSteps = dynamicsWorld.stepSimulation(dt, maxSimSubSteps);
 
 		for (Actor actor : actors) {
@@ -156,9 +123,9 @@ public class World {
 
 	public void initMakers() {
 		explosionMaker = new ExplosionMaker(cameraTransformGroup, simpleUniverse.getCanvas(), this);
-		muzzleMaker = new SparkMaker(cameraTransformGroup, this);
-		bulletMaker = new BulletMaker();
-		spark2Maker = new Spark2Maker();
+		muzzleMaker = new FlashMaker(cameraTransformGroup, this);
+		bulletMaker = new CannonMaker();
+		sparkMaker = new SparkMaker();
 	}
 
 	public void resolveColision() {
@@ -178,7 +145,7 @@ public class World {
 			boolean hit = false;
 			for (int j = 0; j < manifold.getNumContacts(); j++) {
 				ManifoldPoint contactPoint = manifold.getContactPoint(j);
-				
+
 				onCollisionEnter(contactPoint, ghostObject1, ghostObject2);
 				onCollisionEnter(contactPoint, ghostObject2, ghostObject1);
 			}

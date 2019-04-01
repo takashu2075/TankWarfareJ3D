@@ -2,68 +2,66 @@ package controlers;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
-import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
-import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3f;
 
 import abstracts.TankController;
 import actors.Tank;
-import utils.ConversionUtils;
-import utils.DirectionUtils;
+import utils.TargetSeeker;
 
 public class PlayerTankController extends TankController implements KeyListener {
-	private float viewRotX;
-	
 	TransformGroup transformGroup;
-	
+
 	TransformGroup cameraTransformGroup;
-	
+
 	Tank tank;
-	
+
 	boolean isMoveForwardKeyPressed = false;
 	boolean isMoveBackwardKeyPressed = false;
 	boolean isTurnRightKeyPressed = false;
 	boolean isTurnLeftKeyPressed = false;
-	
+
 	boolean isLookUpKeyPressed = false;
 	boolean isLookDownKeyPressed = false;
 	boolean isLookRightKeyPressed = false;
 	boolean isLookLeftKeyPressed = false;
-	
+
 	boolean fireFlg = false;
-	
-	public Tank debugTank;
-	
+
+	TargetSeeker targetSeeker;
+
 	public PlayerTankController(Tank tank, TransformGroup cameraTransformGroup) {
 		super(tank);
 		this.tank = tank;
-		
+
 		transformGroup = new TransformGroup();
-		
+
+		this.targetSeeker = new TargetSeeker(tank);
+
 		this.cameraTransformGroup = cameraTransformGroup;
 	}
-	
+
 	public void setViewAngle() {
 		if (!tank.isDestroyed()) {
 			cameraTransformGroup.setTransform(tank.getCameraTransform3D());
 		}
 	}
-	
+
 	public void step() {
 		moveTank();
 		rotateTurret();
 		rotateCannon();
-		
+
 		if (fireFlg) {
-			tank.fire();
+			Tank target = targetSeeker.seekTarget();
+			System.out.println(target);
+//			tank.fireMissile(target);
+//			tank.fire();
+			tank.fireMissile();
 		}
 		fireFlg = false;
 	}
-	
+
 	private void moveTank() {
 		if (isMoveForwardKeyPressed && isTurnRightKeyPressed) {
 			tank.moveForwardRight();
@@ -85,7 +83,7 @@ public class PlayerTankController extends TankController implements KeyListener 
 			tank.brake();
 		}
 	}
-	
+
 	private void rotateTurret() {
 		if (isLookRightKeyPressed) {
 			tank.rotateTurretRight();
@@ -93,12 +91,13 @@ public class PlayerTankController extends TankController implements KeyListener 
 			tank.rotateTurretLeft();
 		}
 	}
-	
+
 	private void rotateCannon() {
 		if (isLookUpKeyPressed) {
 			tank.rotateMuzzleUp();
 		} else if (isLookDownKeyPressed) {
-			tank.rotateMuzzleDown();;
+			tank.rotateMuzzleDown();
+			;
 		}
 	}
 
@@ -120,7 +119,7 @@ public class PlayerTankController extends TankController implements KeyListener 
 		} else if (e.getKeyCode() == 37) {
 			isLookLeftKeyPressed = true;
 		}
-		
+
 		if (e.getKeyCode() == 32) {
 			fireFlg = true;
 		}
